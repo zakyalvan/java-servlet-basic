@@ -54,8 +54,25 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>renderViewUsingJspServlet</servlet-name>
+		<servlet-class>com.innovez.sample.servlet.RenderViewUsingJspServlet</servlet-class>
+		<init-param>
+			<param-name>registrationForm</param-name>
+			<param-value>/WEB-INF/pages/form-registrasi.jsp</param-value>
+		</init-param>
+		<init-param>
+			<param-name>confirmationPage</param-name>
+			<param-value>/WEB-INF/pages/konfirmasi-registrasi.jsp</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>simpleDummyServlet</servlet-name>
 		<url-pattern>/sample</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>renderViewUsingJspServlet</servlet-name>
+		<url-pattern>/registrasi</url-pattern>
 	</servlet-mapping>
 </web-app>
