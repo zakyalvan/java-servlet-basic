@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>basic-servlet</display-name>
+	
+	<context-param>
+		<param-name>contohParameterPertama</param-name>
+		<param-value>Nilai dari contoh parameter parameter pertama</param-value>
+	</context-param>
+	<context-param>
+		<param-name>contohParameterKedua</param-name>
+		<param-value>Nilai dari contoh parameter parameter kedua</param-value>
+	</context-param>
+	
+	<listener>
+		<description>Just a simple dummy servlet context lister, please look at the class for details</description>
+		<display-name>sampleDummyListener</display-name>
+		<listener-class>com.innovez.sample.context.DummySampleContextListener</listener-class>
+	</listener>
+	
+	<filter>
+		<filter-name>simpleDummyFilter</filter-name>
+		<filter-class>com.innovez.sample.filter.DummySampleFilter</filter-class>
+		<init-param>
+			<param-name>blabla</param-name>
+			<param-value>blibli</param-value>
+		</init-param>
+	</filter>
+	<filter>
+		<filter-name>randomCookieFilter</filter-name>
+		<filter-class>com.innovez.sample.filter.GenerateRandomCookieFilter</filter-class>
+		<init-param>
+			<param-name>enableFilter</param-name>
+			<param-value>false</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>simpleDummyFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>randomCookieFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<servlet>
+		<servlet-name>simpleDummyServlet</servlet-name>
+		<servlet-class>com.innovez.sample.servlet.DummySampleServlet</servlet-class>
+		<init-param>
+			<param-name>initParamPertama</param-name>
+			<param-value>Nilai pararmeter inisiasi servlet pertama</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>simpleDummyServlet</servlet-name>
+		<url-pattern>/sample</url-pattern>
+	</servlet-mapping>
+</web-app>
