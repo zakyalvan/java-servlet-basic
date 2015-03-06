@@ -74,11 +74,51 @@ Buat proyek maven baru  untuk aplikasi web (dengan jenis `packaging` war), denga
 ###Komponen Penting Teknologi Servlet
 Berikut akan dijelaskan sekilas tentang komponen-komponen dalam teknologi servlet. Seperti telah disebutkan semelumnya, contoh proyek sederhana ini sebagai pengantar sebelum memulai pengembangan aplikasi web dengan Spring Framework.
 
+####*Deployment Descriptor*
+
 ####`javax.servlet.ServletContext`
+
 ####`javax.servlet.ServletContextListener`
+Interface ini merupakan kontrak untuk yang harus diimplemantasi oleh developer untuk memperoleh notifikasi untuk dua jenis event terkait siklus hidup dari `javax.servlet.ServletContext` yaitu event inisialiasi dan event destruksi. Masing event di handle oleh method `ServletContextListener.contextInitialized(ServletContextEvent)` dan `ServletContextListener.contextDestroyed(ServletContextEvent)`. Method pertama akan dipanggil oleh *servlet container* pada saat inisiasi sebuat aplikasi web, setelah `javax.servlet.ServletContext` diinisiasi dan sebelum komponen lain yaitu `javax.servlet.Filter` dan `javax.servlet.Servlet` di inisiasi sementara method kedua sebaliknya, dipanggil setelah seluruh komponen tersebut didestruksi. 
+
+Hal penting dari informasi di atas adalah developer dapat menyiapkan seluruh komponen yang kemudian akan dapat digunakan bersama oleh komponen lain (`Filter` dan `Servlet`) pada saat `ServletContext` sudah diinisiasi (komponen-komponen tersebut didaftarkan sebagai atribut-atribut dari `ServletContext`). Selain itu developer dapat melakukan tugas-tugas *housekeeping*, menutup dan 'membersihkan' resource sebelum `ServletContext` didestruksi.
+
+```java
+package javax.servlet;
+
+import java.util.EventListener;
+
+public interface ServletContextListener extends EventListener {
+	public void contextInitialized(ServletContextEvent sce);
+	public void contextDestroyed(ServletContextEvent sce);
+}
+```
+
+Seluruh implementasi `javax.servlet.ServletContextListener` harus di daftarkan dalam *deployment descriptor* (`web.xml`), agar dapat menerima notifikasi tersebut, dan masingmasing method dipanggil berdasarkan urutan dari daftar listener dalam *deployment descriptor*.
+
 ####`javax.servlet.Filter`
+Interface `javax.servlet.Filter` adalah kontrak dari komponen yang harus diimplementasi oleh developer untuk dapat mem-filter baik *request* yang diterima dan/atau *response* yang akan diberikan, sebelum resource lain dalam kontainer dipanggil. Berikut ini adalah interface tersebut
+
+```java
+package javax.servlet;
+
+import java.io.IOException;
+
+public interface Filter {
+	public void init(FilterConfig filterConfig) throws ServletException;
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException;
+	public void destroy();
+}
+```
+
+Method `Filter.init(filterConfig)` dan `Filter.destroy()` adalah dua method yang akan dipanggil masing-masing hanya satu kali oleh *servlet container* dalam siklus hidup setiap object `Filter`, sesuai dengan namanya, method ini akan dipanggil setelah object filter dibuat dan `destroy` pada saat object `Filter` akan didestruksi. Parameter type `javax.servlet.FilterConfig` yang diterima oleh method `init` membungkus (*encapsule*) object `javax.servlet.ServletContext` serta nama `Filter` dan parameter-parameter inisiasi `Filter` (jika ada) yang diberikan dalam *deployment descriptor*.
+
+Seluruh implementasi `javax.servlet.Filter` harus didaftarkan dalam *deployment descriptor* sebelum digunakan. Urutan inisiasi dan destruksi `Filter` tersebut berdasarkan urutan daftar dalam *deployment descriptor*.
+
 ####`javax.servlet.Servlet` dan `javax.servlet.http.HttpServlet`
 ####`javax.servlet.HttpSession`
+
+
 
 ###Deployment Descriptor
 
